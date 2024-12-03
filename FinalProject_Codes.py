@@ -56,10 +56,6 @@ from sklearn.metrics import (confusion_matrix, accuracy_score, f1_score,
                              roc_auc_score, precision_score, classification_report)
 
 
-
-
-
-
 # Set the directory path (replace with your desired path)
 directory = '/Users/roland/Desktop/UCF LIBRARY/DATA SCIENCE 1/Final Project'
 
@@ -70,8 +66,6 @@ os.chdir(directory)
 print("Current working directory:", os.getcwd())
 
 
-
-
 ##============== DATA PREPARATION  ==============
 
 data = pd.read_csv('DisneylandReviews.csv', encoding='latin-1')
@@ -79,13 +73,10 @@ data.head(10)
 data.shape
 data.isnull().sum()
 
-
 data.drop_duplicates(subset='Review_Text', inplace=True, keep='first')
 
 data['Branch'].value_counts(normalize=True) * 100
 data.nunique()
-
-
 
 duplicates = data.duplicated(subset='Review_Text', keep='first')
 duplicates
@@ -101,7 +92,6 @@ data_cleaned.shape
 # Output the number of duplicates found and a preview of the cleaned data
 print(f"Number of duplicates removed: {duplicates.sum()}")
 print(data_cleaned.head(100))
-
 
 
 # Ensure 'Year_month' is treated as a string before splitting
@@ -178,9 +168,6 @@ plt.xticks(rotation=0)
 # Show the plot
 plt.tight_layout()
 plt.show()
-
-
-
 
 
 
@@ -345,15 +332,6 @@ plt.show()
 
 
 
-
-
-
-
-
-
-
-
-
 # ================= Country per reviews =================
 
 import plotly.io as pio
@@ -384,18 +362,12 @@ fig.write_html("plot.html")
 
 
 
-
-
 # ================= Low Ratings By Country =================
 # Group by Reviewer_Location and calculate the mean of ratings, then sort and select top 10
 top_locations = data_cleaned.groupby('Reviewer_Location', as_index=False)['Rating'].mean().sort_values(by='Rating').head(10)
 
 # Apply background gradient styling to the Rating column
 top_locations.style.background_gradient(cmap='autumn', subset=['Rating'])
-
-
-
-
 
 
 #================= Rates-Year ==================
@@ -436,10 +408,6 @@ plt.plot(five_star_rating['Year'] ,five_star_rating['Rating'],color='green',mark
 plt.legend()
 
 
-
-
-
-
 #================ Rates-Branch ====================
 sns.set(style="white")
 plt.figure(figsize=(10, 5))
@@ -451,9 +419,6 @@ plt.tight_layout()
 plt.show()
 
 
-
-
-
 #================== Sentiments-Branches ===============
 plt.figure(figsize=(10, 6))
 sns.countplot(data=data_cleaned, x='Branch', hue='Sentiment', palette='magma')
@@ -463,7 +428,6 @@ plt.ylabel('Count')
 plt.xticks(rotation=0)  # Rotate x-axis labels if needed
 plt.tight_layout()
 plt.show()
-
 
 
 
@@ -520,8 +484,6 @@ plt.show()
 
 
 
-
-
 ######### Sentiment by Year
 
 data_filtered = data_cleaned[data_cleaned['Year'] != 'missing']
@@ -549,9 +511,6 @@ plt.yticks(fontsize=12)
 
 # Show the plot
 plt.show()
-
-
-
 
 
 
@@ -590,9 +549,6 @@ plt.tight_layout(pad=0)  # Remove padding
 plt.show()
 
 
-
-
-
 #================== Positive Sentiment Wordcloud ===============
 
 # Filter the dataset for positive sentiments
@@ -624,8 +580,6 @@ plt.imshow(word_cloud, interpolation='bilinear')
 plt.axis('off')  # Hide axes for better display
 plt.tight_layout(pad=0)  # Remove padding
 plt.show()
-
-
 
 
 #================== Negative Sentiment Wordcloud ===============
@@ -660,13 +614,7 @@ plt.axis('off')  # Hide axes for better display
 plt.tight_layout(pad=0)  # Remove padding
 plt.show()
 
-
-
-
-
-
 data_cleaned['Sentiment'].value_counts(normalize=True) * 100
-
 
 
 
@@ -764,8 +712,6 @@ TokenizeText = [word_tokenize(i) for i in final_data.Review_Text]
 final_data.Review_Text = TokenizeText
 print(final_data.Review_Text.head())
 
-
-
 # Lemmatization
 nltk.download('wordnet')
 lemmatizer = WordNetLemmatizer()
@@ -782,8 +728,6 @@ final_data["Review_Text"] = final_data["Review_Text"].apply(lambda x : " ".join(
 final_data["Review_Text"]
 
 
-
-
 #===============================================================================
 # Splitting the data
 X, y = final_data["Review_Text"], final_data["response"]
@@ -792,7 +736,6 @@ print(X_train.shape)
 print(X_test.shape)
 y_train.nunique()
 y_train.value_counts()
-
 
 
 # Bag of Words
@@ -816,10 +759,6 @@ BoW_X_train, BoW_y_train = smote.fit_resample(BoW_X_train, y_train)
 print(BoW_y_train.value_counts(normalize=True))
 
 
-
-
-
-
 #Check
 #BoW_X_train.toarray()[100][21900:21950]
 
@@ -828,9 +767,6 @@ vocab = BoW.vocabulary_
 print("Vocabulary:\n")
 for word, index in sorted(vocab.items(), key=lambda x: x[1]):  # Sort by index
     print(f"Index {index}: {word}")
-
-
-
 
 # TF-IDF
 TF_IDF = TfidfVectorizer(ngram_range=(1,1), max_features= 200000)
@@ -852,16 +788,11 @@ smote = SMOTE(random_state=42)
 TF_IDF_X_train, TF_IDF_y_train = smote.fit_resample(TF_IDF_X_train, y_train)
 print(TF_IDF_y_train.value_counts(normalize=True))
 
-
-
-
 #Check
 #TF_IDF_X_train.toarray()[100][21900:21950]
 
 
-
 ##### MODELLING
-
 # Function for logistic regression to compare Bag of Words and TF-IDF
 def LogisticRegressionFunction(X_train, X_test, y_train, y_test, description):
     # Initialize logistic regression for binary classification
@@ -913,11 +844,6 @@ LogisticRegressionFunction(BoW_X_train, BoW_X_test, BoW_y_train, y_test, 'Logist
 
 # Logistic regression with TF-IDF
 LogisticRegressionFunction(TF_IDF_X_train, TF_IDF_X_test, TF_IDF_y_train, y_test, 'Logistic regression with TF-IDF')
-
-
-
-
-
 
 
 
@@ -979,8 +905,6 @@ LogisticRegressionFunction(TF_IDF_X_train, TF_IDF_X_test, TF_IDF_y_train, y_test
 
 
 
-
-
 ############ Random Forest
 
 
@@ -1038,11 +962,6 @@ RandomForestFunction(TF_IDF_X_train, TF_IDF_X_test, TF_IDF_y_train, y_test, 'Ran
 
 
 
-
-
-
-
-
 # Function for Random Forest to compare Bag of Words and TF-IDF
 def RandomForestFunction(X_train, X_test, y_train, y_test, description):
     # Initialize Random Forest classifier
@@ -1097,9 +1016,6 @@ RandomForestFunction(BoW_X_train, BoW_X_test, BoW_y_train, y_test, 'Random Fores
 
 # Random Forest with TF-IDF
 RandomForestFunction(TF_IDF_X_train, TF_IDF_X_test, TF_IDF_y_train, y_test, 'Random Forest with TF-IDF')
-
-
-
 
 
 
@@ -1185,14 +1101,7 @@ RandomForestFunction(TF_IDF_X_train, TF_IDF_X_test, y_train, y_test, 'Random For
 
 
 
-
-
-
-
 ######### SVM 
-
-
-
 # Function for SVM to compare Bag of Words and TF-IDF
 def SVMFunction(X_train, X_test, y_train, y_test, description):
     # Initialize SVM classifier
@@ -1244,9 +1153,6 @@ SVMFunction(BoW_X_train, BoW_X_test, BoW_y_train, y_test, 'SVM with BOW')
 
 # Logistic regression with TF-IDF
 SVMFunction(TF_IDF_X_train, TF_IDF_X_test, TF_IDF_y_train, y_test, 'SVM with TF-IDF')
-
-
-
 
 
 
@@ -1307,14 +1213,7 @@ SVMFunction(TF_IDF_X_train, TF_IDF_X_test, TF_IDF_y_train, y_test, 'SVM with TF-
 
 
 
-
-
-
-
 ######### XGBOOST
-
-
-
 # Function for XGBoost to compare Bag of Words and TF-IDF
 def XGBoostFunction(X_train, X_test, y_train, y_test, description):
     # Initialize XGBoost classifier
@@ -1366,9 +1265,6 @@ XGBoostFunction(BoW_X_train, BoW_X_test, BoW_y_train, y_test, 'XGBOOST with BOW'
 
 # Logistic regression with TF-IDF
 XGBoostFunction(TF_IDF_X_train, TF_IDF_X_test, TF_IDF_y_train, y_test, 'XGBOOST with TF-IDF')
-
-
-
 
 
 
@@ -1428,12 +1324,7 @@ XGBoostFunction(BoW_X_train, BoW_X_test, BoW_y_train, y_test, 'XGBoost with BOW'
 XGBoostFunction(TF_IDF_X_train, TF_IDF_X_test, TF_IDF_y_train, y_test, 'XGBoost with TF-IDF')
 
 
-
-
-
 ######### K-Nearest Neighbors (KNN)
-
-
 # Function for K-Nearest Neighbors to compare Bag of Words and TF-IDF
 def KNNFunction(X_train, X_test, y_train, y_test, description):
     # Initialize K-Nearest Neighbors classifier
@@ -1485,10 +1376,6 @@ KNNFunction(BoW_X_train, BoW_X_test, BoW_y_train, y_test, 'KNN with BOW')
 
 # Logistic regression with TF-IDF
 KNNFunction(TF_IDF_X_train, TF_IDF_X_test, TF_IDF_y_train, y_test, 'KNN with TF-IDF')
-
-
-
-
 
 
 
@@ -1548,13 +1435,7 @@ KNNFunction(BoW_X_train, BoW_X_test, BoW_y_train, y_test, 'KNN with BOW')
 KNNFunction(TF_IDF_X_train, TF_IDF_X_test, TF_IDF_y_train, y_test, 'KNN with TF-IDF')
 
 
-
-
-
-
-
 ############## NEURAL NETWORK 
-
 # Function for Neural Networks to compare Bag of Words and TF-IDF
 def NeuralNetworkFunction(X_train, X_test, y_train, y_test, description):
     # Initialize the Neural Network classifier
@@ -1603,14 +1484,12 @@ def NeuralNetworkFunction(X_train, X_test, y_train, y_test, description):
     print(classification_report(y_test, y_prediction))
 
 
-
 # Logistic regression with Bag of Words
 NeuralNetworkFunction(BoW_X_train, BoW_X_test, BoW_y_train, y_test, 'NN with BOW')
 
 
 # Logistic regression with TF-IDF
 NeuralNetworkFunction(TF_IDF_X_train, TF_IDF_X_test, TF_IDF_y_train, y_test, 'NN with TF-IDF')
-
 
 
 
@@ -1675,8 +1554,6 @@ NeuralNetworkFunction(TF_IDF_X_train, TF_IDF_X_test, TF_IDF_y_train, y_test, 'NN
 
 
 
-
-
 # Function for Naive Bayes to compare Bag of Words and TF-IDF
 def NaiveBayesFunction(X_train, X_test, y_train, y_test, description):
     # Initialize the Naive Bayes classifier
@@ -1733,8 +1610,6 @@ NaiveBayesFunction(BoW_X_train1, BoW_X_test1, BoW_y_train, y_test, 'Naive Bayes 
 
 # Naive Bayes with TF-IDF
 NaiveBayesFunction(TF_IDF_X_train, TF_IDF_X_test, TF_IDF_y_train, y_test, 'Naive Bayes with TF-IDF')
-
-
 
 
 
