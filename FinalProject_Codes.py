@@ -1740,10 +1740,7 @@ NaiveBayesFunction(TF_IDF_X_train, TF_IDF_X_test, TF_IDF_y_train, y_test, 'Naive
 
 #################### Comparing the Accuracy Measures ###############
 
-import matplotlib.pyplot as plt
-import numpy as np
-
-# Data: Replace these with your actual scores
+# Bar Plot
 models = ['Logistic', 'Random Forest', 'SVM', 'XGBoost', 'Neural Network']
 accuracy_bow = [0.89, 0.85, 0.89, 0.91, 0.90]  # Accuracy scores for Bag-of-Words
 accuracy_tfidf = [0.89, 0.88, 0.90, 0.90, 0.90]  # Accuracy scores for TF-IDF
@@ -1784,10 +1781,7 @@ plt.show()
 
 
 
-
-import matplotlib.pyplot as plt
-
-# Data: Replace these with your actual scores
+# Line Plot
 models = ['Logistic', 'Random Forest', 'SVM', 'XGBoost', 'Neural Network']
 accuracy_bow = [0.89, 0.85, 0.89, 0.91, 0.90]  # Accuracy scores for Bag-of-Words
 accuracy_tfidf = [0.89, 0.88, 0.90, 0.90, 0.90]  # Accuracy scores for TF-IDF
